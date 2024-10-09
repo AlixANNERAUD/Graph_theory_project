@@ -1,0 +1,15 @@
+#GrapheRougeDeLaFigure4
+12 s
+va vb vc vd ve vf vg vh vi vj vk vl 
+va 2 vb vg
+vb 3 va ve vh
+vc 3 vd ve vg
+vd 4 vc ve vf vl
+ve 5 vb vc vd vf vi
+vf 3 vd ve vl
+vg 2 va vc
+vh 3 vb vi vl
+vi 2 ve vh
+vj 1 vk
+vk 2 vj vl
+vl 4 vd vf vk vh

@@ -1,0 +1,15 @@
+#GrapheRougeDeLaFigure6
+12 s
+va vb vc vd ve vf vg vh vi vj vk vl 
+va 1 vb
+vb 2 va vc
+vc 2 vb vd
+vd 2 vc ve
+ve 2 vd vf
+vf 2 ve vg
+vg 2 vf vh
+vh 2 vg vi
+vi 2 vh vj
+vj 2 vi vk
+vk 2 vj vl
+vl 1 vk

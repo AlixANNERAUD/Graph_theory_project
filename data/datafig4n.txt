@@ -1,0 +1,15 @@
+#GrapheNoirDeLaFigure4
+12 s
+v1 v2 v3 v4 v5 v6 v7 v8 v9 v10 v11 v12
+v1 2 v2 v7
+v2 3 v1 v5 v8
+v3 3 v4 v5 v7
+v4 4 v3 v5 v6 v12
+v5 5 v2 v3 v4 v6 v9
+v6 3 v4 v5 v12
+v7 2 v1 v3
+v8 2 v2 v9
+v9 2 v5 v8
+v10 1 v11
+v11 2 v10 v12
+v12 3 v4 v6 v11
