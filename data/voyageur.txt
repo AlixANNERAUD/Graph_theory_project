@@ -1,6 +1,11 @@
-#GrapheDuVoyageur
-3 s
-v1 v2 v3
-v1 1 v2
-v2 1 v3
-v3 1 v1
+# Définition des sommets (V <nom_sommet> <estIntersection>)
+V 1 false
+V 2 false
+V 3 true
+V 4 false
+
+# Définition des arêtes (E <source> <destination> <coût>)
+E 1 2 1
+E 2 3 1
+E 3 4 1
+E 4 1 1

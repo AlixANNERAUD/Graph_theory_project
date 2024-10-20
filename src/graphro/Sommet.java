@@ -1,28 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package graphro;
 
-/*    Classe de Sommets
-@author FMorain (morain@lix.polytechnique.fr)
-@author PChassignet (chassign@lix.polytechnique.fr)
-@version 2006.11.27
- */
 public class Sommet {
 
     String nom;
     private int marque;
+    private boolean estIntersection;
 
-    public Sommet(String nn, int mm) {
+    public Sommet(String nn, int mm, boolean estIntersection) {
         nom = nn;
         marque = mm;
+        this.estIntersection = estIntersection;
     }
 
     public Sommet(Sommet s, int mm) {
         nom = s.nom;
         marque = mm;
+        this.estIntersection = s.estIntersection;
     }
 
     public int valeurMarque() {
@@ -33,20 +26,33 @@ public class Sommet {
         marque = m;
     }
 
+    public boolean estIntersection() {
+        return estIntersection;
+    }
+
+    public void setEstIntersection(boolean estIntersection) {
+        this.estIntersection = estIntersection;
+    }
+
+    @Override
     public boolean equals(Object o) {
-        return nom.equals(((Sommet) o).nom);
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        Sommet sommet = (Sommet) o;
+
+        return nom.equals(sommet.nom);
     }
 
-    public int compareTo(Object o) {
-        Sommet s = (Sommet) o;
-        return nom.compareTo(s.nom);
-    }
-
-    public String toString() {
-        return "" + nom;
-    }
-
+    @Override
     public int hashCode() {
         return nom.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return nom;
     }
 }

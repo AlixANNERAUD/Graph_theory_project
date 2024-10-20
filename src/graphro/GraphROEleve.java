@@ -5,7 +5,8 @@
  */
 package graphro;
 
-import java.util.Vector;
+import java.io.IOException;
+import java.util.List;
 
 /**
  *
@@ -17,11 +18,34 @@ public class GraphROEleve {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        GrapheListe graphe = GrapheListe.deFichier("./data/voyageur.txt");
+        try {
+            // Lecture du graphe depuis le fichier
+            GrapheListe graphe = new GrapheListe("./data/voyageur.txt");
 
-        VoyageurDuCommerce vdc = new VoyageurDuCommerce(graphe);
+            // Récupération du sommet de départ
+            Sommet depart = null;
+            for (Sommet s : graphe.sommets()) {
+                if (s.nom.equals("1")) {
+                    depart = s;
+                    break;
+                }
+            }
+            if (depart == null) {
+                throw new IllegalArgumentException("Le sommet de départ 'A' n'a pas été trouvé dans le graphe.");
+            }
 
-        Vector<Sommet> cicle = vdc.algoOptimisation(graphe.sommets().iterator().next());
-        System.out.println("Ciclo: " + cicle);
+            VoyageurDuCommerce vdc = new VoyageurDuCommerce(graphe);
+
+            List<Sommet> tourOptimal = vdc.algoOptimisation(depart);
+
+            System.out.println("Tour optimal : ");
+            for (Sommet s : tourOptimal) {
+                System.out.print(s.nom + " -> ");
+            }
+            System.out.println("FIN");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
