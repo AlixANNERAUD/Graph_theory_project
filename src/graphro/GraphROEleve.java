@@ -4,9 +4,12 @@
  * and open the template in the editor.
  */
 package graphro;
+
+import java.util.Vector;
+
 /**
  *
- * @author gdelmondo
+ * 
  */
 public class GraphROEleve {
 
@@ -14,18 +17,11 @@ public class GraphROEleve {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
-        
-        
-        
-        
-        
-    
-        
+        GrapheListe graphe = GrapheListe.deFichier("./data/voyageur.txt");
+
+        VoyageurDuCommerce vdc = new VoyageurDuCommerce(graphe);
+
+        Vector<Sommet> cicle = vdc.algoOptimisation(graphe.sommets().iterator().next());
+        System.out.println("Ciclo: " + cicle);
     }
-    
-    
-    
-    
-    
 }

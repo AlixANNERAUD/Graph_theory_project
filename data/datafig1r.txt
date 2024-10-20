@@ -1,8 +1,0 @@
-#GrapheRougeDeLaFigure1
-5 s
-va vb vc vd ve
-va 1 vb
-vb 3 va vc vd
-vc 1 vb
-vd 2 vb ve
-ve 1 vd

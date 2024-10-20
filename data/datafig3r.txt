@@ -1,9 +1,0 @@
-#GrapheRougeDeLaFigure3
-6 s
-va vb vc vd ve vf
-va 1 vb
-vb 2 va vd
-vc 2 vd ve
-vd 4 vb vc ve vf
-ve 3 vc vd vf 
-vf 2 vd ve
