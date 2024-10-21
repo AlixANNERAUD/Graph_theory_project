@@ -11,7 +11,6 @@ public class GrapheListe {
         adjacence = new HashMap<>();
     }
 
-    // Nouveau constructeur pour lire le graphe depuis un fichier
     public GrapheListe(String nomFichier) throws IOException {
         adjacence = new HashMap<>();
         lireGrapheDepuisFichier(nomFichier);
@@ -29,16 +28,19 @@ public class GrapheListe {
         adjacence.get(source).add(new Arc(destination, cout));
     }
 
+    // Assurez-vous que cette méthode est déclarée 'public'
     public List<Arc> getAdjacents(Sommet s) {
         return adjacence.getOrDefault(s, new ArrayList<>());
     }
 
+    // Assurez-vous que cette méthode est déclarée 'public'
     public Collection<Sommet> sommets() {
         return adjacence.keySet();
     }
 
-    public int plusCourtChemin(Sommet source, Sommet destination) {
+    public ResultatChemin plusCourtChemin(Sommet source, Sommet destination) {
         Map<Sommet, Integer> distances = new HashMap<>();
+        Map<Sommet, Sommet> predecesseurs = new HashMap<>();
         PriorityQueue<SommetDistance> queue = new PriorityQueue<>();
         Set<Sommet> visites = new HashSet<>();
 
@@ -57,7 +59,15 @@ public class GrapheListe {
             visites.add(courant);
 
             if (courant.equals(destination)) {
-                return distances.get(courant);
+                // Reconstruire le chemin
+                List<Sommet> chemin = new ArrayList<>();
+                Sommet actuel = destination;
+                while (actuel != null) {
+                    chemin.add(actuel);
+                    actuel = predecesseurs.get(actuel);
+                }
+                Collections.reverse(chemin);
+                return new ResultatChemin(distances.get(destination), chemin);
             }
 
             for (Arc arc : getAdjacents(courant)) {
@@ -65,15 +75,15 @@ public class GrapheListe {
                 int nouveauCout = distances.get(courant) + arc.getCout();
                 if (nouveauCout < distances.get(voisin)) {
                     distances.put(voisin, nouveauCout);
+                    predecesseurs.put(voisin, courant);
                     queue.add(new SommetDistance(voisin, nouveauCout));
                 }
             }
         }
 
-        return Integer.MAX_VALUE; // Pas de chemin trouvé
+        return new ResultatChemin(Integer.MAX_VALUE, null);
     }
 
-    // Méthode pour lire le graphe depuis un fichier
     public void lireGrapheDepuisFichier(String nomFichier) throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(nomFichier));
         String ligne;
@@ -115,7 +125,6 @@ public class GrapheListe {
         br.close();
     }
 
-    // Classe interne pour gérer la priorité dans la file de priorité
     private class SommetDistance implements Comparable<SommetDistance> {
         Sommet sommet;
         int distance;

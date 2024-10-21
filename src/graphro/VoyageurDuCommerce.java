@@ -5,11 +5,11 @@ import java.util.*;
 public class VoyageurDuCommerce {
 
     private GrapheListe graphe;
-    private Map<String, Integer> cachePlusCourtsChemins;
+    private Map<String, ResultatChemin> cacheChemins;
 
     public VoyageurDuCommerce(GrapheListe graphe) {
         this.graphe = graphe;
-        this.cachePlusCourtsChemins = new HashMap<>();
+        this.cacheChemins = new HashMap<>();
     }
 
     public List<Sommet> algoOptimisation(Sommet depart) {
@@ -17,6 +17,9 @@ public class VoyageurDuCommerce {
         List<Sommet> tour = initialiserTour(pointsLivraison, depart);
 
         boolean amelioration;
+        List<Sommet> meilleurCheminComplet = new ArrayList<>();
+        int meilleurCout = calculerCoutTour(tour, meilleurCheminComplet);
+
         do {
             amelioration = false;
             int tailleTour = tour.size();
@@ -24,15 +27,21 @@ public class VoyageurDuCommerce {
             for (int i = 1; i < tailleTour - 2; i++) {
                 for (int j = i + 1; j < tailleTour - 1; j++) {
                     List<Sommet> nouveauTour = deuxOptEchange(tour, i, j);
-                    if (calculerCoutTour(nouveauTour) < calculerCoutTour(tour)) {
+                    List<Sommet> nouveauCheminComplet = new ArrayList<>();
+                    int nouveauCout = calculerCoutTour(nouveauTour, nouveauCheminComplet);
+
+                    if (nouveauCout < meilleurCout) {
                         tour = nouveauTour;
+                        meilleurCheminComplet = nouveauCheminComplet;
+                        meilleurCout = nouveauCout;
                         amelioration = true;
                     }
                 }
             }
         } while (amelioration);
 
-        return tour;
+        // Retourner le meilleur chemin complet incluant les arcs
+        return meilleurCheminComplet;
     }
 
     private List<Sommet> obtenirPointsLivraison(Sommet depart) {
@@ -62,16 +71,25 @@ public class VoyageurDuCommerce {
         return nouveauTour;
     }
 
-    private int calculerCoutTour(List<Sommet> tour) {
+    private int calculerCoutTour(List<Sommet> tour, List<Sommet> cheminComplet) {
         int coutTotal = 0;
+        cheminComplet.clear();
+
         for (int i = 0; i < tour.size() - 1; i++) {
             Sommet s1 = tour.get(i);
             Sommet s2 = tour.get(i + 1);
-            int cout = obtenirCoutPlusCourtChemin(s1, s2);
-            if (cout == Integer.MAX_VALUE) {
+            ResultatChemin resultat = obtenirResultatChemin(s1, s2);
+            if (resultat.getCout() == Integer.MAX_VALUE) {
                 return Integer.MAX_VALUE; // Pas de chemin entre s1 et s2
             }
-            coutTotal += cout;
+            coutTotal += resultat.getCout();
+
+            // Ajouter le chemin au chemin complet, en évitant les doublons
+            if (i == 0) {
+                cheminComplet.addAll(resultat.getChemin());
+            } else {
+                cheminComplet.addAll(resultat.getChemin().subList(1, resultat.getChemin().size()));
+            }
         }
         return coutTotal;
     }

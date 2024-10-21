@@ -20,7 +20,7 @@ public class GraphROEleve {
     public static void main(String[] args) {
         try {
             // Lecture du graphe depuis le fichier
-            GrapheListe graphe = new GrapheListe("./data/voyageur.txt");
+            GrapheListe graphe = new GrapheListe("data/voyageur.txt");
 
             // Récupération du sommet de départ
             Sommet depart = null;
@@ -31,15 +31,18 @@ public class GraphROEleve {
                 }
             }
             if (depart == null) {
-                throw new IllegalArgumentException("Le sommet de départ 'Depot' n'a pas été trouvé dans le graphe.");
+                throw new IllegalArgumentException("Le sommet de départ 'A' n'a pas été trouvé dans le graphe.");
             }
 
+            // Création de l'instance du voyageur de commerce
             VoyageurDuCommerce vdc = new VoyageurDuCommerce(graphe);
 
-            List<Sommet> tourOptimal = vdc.algoOptimisation(depart);
+            // Calcul du tour optimal
+            List<Sommet> cheminOptimal = vdc.algoOptimisation(depart);
 
-            System.out.println("Tour optimal : ");
-            for (Sommet s : tourOptimal) {
+            // Affichage du chemin optimal
+            System.out.println("Chemin optimal : ");
+            for (Sommet s : cheminOptimal) {
                 System.out.print(s.nom + " -> ");
             }
             System.out.println("FIN");
