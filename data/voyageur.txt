@@ -6,44 +6,44 @@ V 10_rue_rouge false
 V 22_rue_verte false
 V 3_rue_marron false
 
-V Station_jaune false
-V Station_rouge false
-V Station_verte false
+V Station_jaune true
+V Station_rouge true
+V Station_verte true
 
 # Bleu clair
-V Bleu_clair_gris false
-V Bleu_clair_rouge false
+V Bleu_clair_gris true
+V Bleu_clair_rouge true
 
 # Bleu foncé
-V Bleu_fonce_marron false
+V Bleu_fonce_marron true
 
 # Gris clair
-V Gris_clair_vert false
-V Gris_clair_rose false
+V Gris_clair_vert true
+V Gris_clair_rose true
 
 # Gris foncé
-V Gris_fonce_vert false
-V Gris_fonce_rose false
-V Gris_fonce_orange false
-V Gris_fonce_bleu_clair false
-V Gris_fonce_mauve false
+V Gris_fonce_vert true
+V Gris_fonce_rose true
+V Gris_fonce_orange true
+V Gris_fonce_bleu_clair true
+V Gris_fonce_mauve true
 
 # Jaune
-V Jaune_mauve false
+V Jaune_mauve true
 
 # Marron
-V Marron_vert false
+V Marron_vert true
 
 # Mauve
-V Mauve_vert false
+V Mauve_vert true
 
 # Orange
-V Orange_rouge false
+V Orange_rouge true
 
 # Rose
 
 # Rouge
-V Rouge_vert false
+V Rouge_vert true
 
 # Vert
 
