@@ -1,6 +1,12 @@
-# Projet recherche opérationnelle
+<h1 align="center">📦 Delivery route optimization 🗺️</h1>
 
-## Graph 
+
+## 🚀 Introduction
+
+This project was created for the Graph Theory course at [INSA Rouen Normandie](https://www.insa-rouen.fr/). The goal was to develop a graph theory algorithm to find the best route for a walking delivery person to deliver packages to different locations. The project was developed in Java.
+
+Here is the graph used for this project:
+
 
 ```mermaid
 graph BT
@@ -21,7 +27,6 @@ graph BT
     Gris_fonce_vert{" "}
     Gris_fonce_rose{" "}
     Gris_fonce_orange{" "}
-    Gris_fonce_bleu_clair{" "}
     Gris_fonce_mauve{" "}
     Jaune_mauve{" "}
     Marron_vert{" "}
@@ -104,3 +109,16 @@ graph BT
     style 10_rue_rouge fill:red;
     style 22_rue_verte fill:green;
 ```
+
+- Rounded rectangles represent the customers' homes.
+- Chamfered rectangles represent the metro stations.
+- Rhombuses represent the intersections between streets.
+- The warehouse is represented by the "Dépot" rectangle.
+
+## ℹ️ About
+
+This project was developed by:  
+- [Alix ANNERAUD](https://alix.anneraud.fr)
+- Dimitri TIMOZ 
+
+This project is under the [MIT license](License).
