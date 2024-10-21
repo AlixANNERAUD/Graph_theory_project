@@ -77,12 +77,15 @@ public class VoyageurDuCommerce {
     }
 
     private int obtenirCoutPlusCourtChemin(Sommet s1, Sommet s2) {
-        String cle = s1.nom + "-" + s2.nom;
-        if (cachePlusCourtsChemins.containsKey(cle)) {
-            return cachePlusCourtsChemins.get(cle);
+        String cle_1 = s1.nom + "-" + s2.nom;
+        String cle_2 = s2.nom + "-" + s1.nom;
+        if (cachePlusCourtsChemins.containsKey(cle_1)) {
+            return cachePlusCourtsChemins.get(cle_1);
+        } else if (cachePlusCourtsChemins.containsKey(cle_2)) {
+            return cachePlusCourtsChemins.get(cle_2);
         } else {
             int cout = graphe.plusCourtChemin(s1, s2);
-            cachePlusCourtsChemins.put(cle, cout);
+            cachePlusCourtsChemins.put(cle_1, cout);
             return cout;
         }
     }
