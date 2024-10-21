@@ -79,7 +79,7 @@ E 8_rue_mauve Mauve_vert 1
 E Gris_fonce_orange Orange_rouge 1
 
 # Rose
-E Gris_clair_rose Gris_clair_rose 1
+E Gris_clair_rose Gris_fonce_rose 1
 
 # Rouge
 E Orange_rouge Bleu_clair_rouge 1 
