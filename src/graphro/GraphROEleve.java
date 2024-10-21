@@ -25,13 +25,13 @@ public class GraphROEleve {
             // Récupération du sommet de départ
             Sommet depart = null;
             for (Sommet s : graphe.sommets()) {
-                if (s.nom.equals("1")) {
+                if (s.nom.equals("Depot")) {
                     depart = s;
                     break;
                 }
             }
             if (depart == null) {
-                throw new IllegalArgumentException("Le sommet de départ 'A' n'a pas été trouvé dans le graphe.");
+                throw new IllegalArgumentException("Le sommet de départ 'Depot' n'a pas été trouvé dans le graphe.");
             }
 
             VoyageurDuCommerce vdc = new VoyageurDuCommerce(graphe);
