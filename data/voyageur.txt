@@ -94,3 +94,7 @@ E Gris_fonce_vert Gris_clair_vert 1
 E Gris_clair_vert 22_rue_verte 1
 E 22_rue_verte Mauve_vert 1
 E Mauve_vert Rouge_vert 1
+
+# Metro
+E Station_verte Station_rouge 1
+E Station_rouge Station_jaune 1
