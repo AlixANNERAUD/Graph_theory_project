@@ -11,7 +11,7 @@ V Station_rouge true
 V Station_verte true
 
 # Bleu clair
-V Bleu_clair_gris true
+V Bleu_clair_gris_fonce true
 V Bleu_clair_rouge true
 
 # Bleu foncé
@@ -25,7 +25,6 @@ V Gris_clair_rose true
 V Gris_fonce_vert true
 V Gris_fonce_rose true
 V Gris_fonce_orange true
-V Gris_fonce_bleu_clair true
 V Gris_fonce_mauve true
 
 # Jaune
@@ -49,7 +48,7 @@ V Rouge_vert true
 
 # Définition des arêtes (E <source> <destination> <coût>)
 # Bleu clair
-E Bleu_clair_gris Bleu_clair_rouge 1
+E Bleu_clair_gris_fonce Bleu_clair_rouge 1
 
 # Bleu foncé
 E Depot Bleu_fonce_marron 1
@@ -60,8 +59,8 @@ E Gris_clair_vert Gris_clair_rose 1
 # Gris foncé
 E Gris_fonce_vert Gris_fonce_rose 1
 E Gris_fonce_rose Gris_fonce_orange 1
-E Gris_fonce_orange Gris_fonce_bleu_clair 1
-E Gris_fonce_bleu_clair Gris_fonce_mauve 1
+E Gris_fonce_orange Bleu_clair_gris_fonce 1
+E Bleu_clair_gris_fonce Gris_fonce_mauve 1
 
 # Jaune
 E Jaune_mauve Station_jaune 1
