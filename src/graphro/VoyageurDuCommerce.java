@@ -5,21 +5,26 @@ import java.util.*;
 public class VoyageurDuCommerce {
 
     private GrapheListe graphe;
-    private Map<String, ResultatChemin> cacheChemins;
+    private Map<String, ResultatChemin> cachePlusCourtsChemins;
+    private GrapheListe grapheCompletAdresses;
 
     public VoyageurDuCommerce(GrapheListe graphe) {
         this.graphe = graphe;
-        this.cacheChemins = new HashMap<>();
+        this.cachePlusCourtsChemins = new HashMap<>();
     }
 
     public List<Sommet> algoOptimisation(Sommet depart) {
-        List<Sommet> pointsLivraison = obtenirPointsLivraison(depart);
-        List<Sommet> tour = initialiserTour(pointsLivraison, depart);
+        List<Sommet> adresses = obtenirPointsLivraison(depart);
 
+        // Créer le graphe complet des adresses
+        creerGrapheCompletDesAdresses(adresses);
+
+        // Initialiser le tour sur le graphe complet des adresses
+        List<Sommet> tour = initialiserTour(adresses, depart);
+
+        // Appliquer l'algorithme 2-opt sur le graphe complet des adresses
         boolean amelioration;
-        List<Sommet> meilleurCheminComplet = new ArrayList<>();
-        int meilleurCout = calculerCoutTour(tour, meilleurCheminComplet);
-
+        int meilleurCout = calculerCoutTour(tour);
         do {
             amelioration = false;
             int tailleTour = tour.size();
@@ -27,12 +32,10 @@ public class VoyageurDuCommerce {
             for (int i = 1; i < tailleTour - 2; i++) {
                 for (int j = i + 1; j < tailleTour - 1; j++) {
                     List<Sommet> nouveauTour = deuxOptEchange(tour, i, j);
-                    List<Sommet> nouveauCheminComplet = new ArrayList<>();
-                    int nouveauCout = calculerCoutTour(nouveauTour, nouveauCheminComplet);
+                    int nouveauCout = calculerCoutTour(nouveauTour);
 
                     if (nouveauCout < meilleurCout) {
                         tour = nouveauTour;
-                        meilleurCheminComplet = nouveauCheminComplet;
                         meilleurCout = nouveauCout;
                         amelioration = true;
                     }
@@ -40,25 +43,71 @@ public class VoyageurDuCommerce {
             }
         } while (amelioration);
 
-        // Retourner le meilleur chemin complet incluant les arcs
-        return meilleurCheminComplet;
+        // Reconstituer le chemin complet dans le graphe original
+        List<Sommet> cheminComplet = new ArrayList<>();
+
+        for (int i = 0; i < tour.size() - 1; i++) {
+            Sommet s1 = tour.get(i);
+            Sommet s2 = tour.get(i + 1);
+            ResultatChemin resultat = obtenirResultatChemin(s1, s2);
+            List<Sommet> chemin = resultat.getChemin();
+
+            if (chemin == null) {
+                throw new IllegalStateException("Aucun chemin trouvé entre " + s1.nom + " et " + s2.nom);
+            }
+
+            // Ajouter le chemin sans répéter les sommets
+            for (Sommet s : chemin) {
+                if (!cheminComplet.isEmpty() && s.equals(cheminComplet.get(cheminComplet.size() - 1))) {
+                    continue;
+                }
+                cheminComplet.add(s);
+            }
+        }
+
+        return cheminComplet;
+    }
+
+    private void creerGrapheCompletDesAdresses(List<Sommet> adresses) {
+        grapheCompletAdresses = new GrapheListe();
+        cachePlusCourtsChemins = new HashMap<>();
+        for (Sommet adresse1 : adresses) {
+            for (Sommet adresse2 : adresses) {
+                if (!adresse1.equals(adresse2)) {
+                    String cle = adresse1.nom + "-" + adresse2.nom;
+                    ResultatChemin resultat;
+                    if (cachePlusCourtsChemins.containsKey(cle)) {
+                        resultat = cachePlusCourtsChemins.get(cle);
+                    } else {
+                        resultat = graphe.plusCourtChemin(adresse1, adresse2);
+                        cachePlusCourtsChemins.put(cle, resultat);
+                    }
+                    grapheCompletAdresses.ajouterArc(adresse1, adresse2, resultat.getCout());
+                }
+            }
+        }
     }
 
     private List<Sommet> obtenirPointsLivraison(Sommet depart) {
         List<Sommet> pointsLivraison = new ArrayList<>();
         for (Sommet s : graphe.sommets()) {
-            if (!s.equals(depart) && !s.estIntersection()) {
+            if (!s.estIntersection()) {
                 pointsLivraison.add(s);
             }
+        }
+        // S'assurer que le point de départ est le premier de la liste
+        if (!pointsLivraison.contains(depart)) {
+            pointsLivraison.add(0, depart);
+        } else {
+            pointsLivraison.remove(depart);
+            pointsLivraison.add(0, depart);
         }
         return pointsLivraison;
     }
 
     private List<Sommet> initialiserTour(List<Sommet> pointsLivraison, Sommet depart) {
-        List<Sommet> tour = new ArrayList<>();
-        tour.add(depart);
-        tour.addAll(pointsLivraison);
-        tour.add(depart);
+        List<Sommet> tour = new ArrayList<>(pointsLivraison);
+        tour.add(depart); // Retour au point de départ
         return tour;
     }
 
@@ -71,40 +120,31 @@ public class VoyageurDuCommerce {
         return nouveauTour;
     }
 
-    private int calculerCoutTour(List<Sommet> tour, List<Sommet> cheminComplet) {
+    private int calculerCoutTour(List<Sommet> tour) {
         int coutTotal = 0;
-        cheminComplet.clear();
-
         for (int i = 0; i < tour.size() - 1; i++) {
             Sommet s1 = tour.get(i);
             Sommet s2 = tour.get(i + 1);
-            ResultatChemin resultat = obtenirResultatChemin(s1, s2);
-            if (resultat.getCout() == Integer.MAX_VALUE) {
+            int cout = grapheCompletAdresses.getCoutArc(s1, s2);
+            if (cout == Integer.MAX_VALUE) {
                 return Integer.MAX_VALUE; // Pas de chemin entre s1 et s2
             }
-            coutTotal += resultat.getCout();
-
-            // Ajouter le chemin au chemin complet, en évitant les doublons
-            if (i == 0) {
-                cheminComplet.addAll(resultat.getChemin());
-            } else {
-                cheminComplet.addAll(resultat.getChemin().subList(1, resultat.getChemin().size()));
-            }
+            coutTotal += cout;
         }
         return coutTotal;
     }
 
-    private int obtenirCoutPlusCourtChemin(Sommet s1, Sommet s2) {
-        String cle_1 = s1.nom + "-" + s2.nom;
-        String cle_2 = s2.nom + "-" + s1.nom;
-        if (cachePlusCourtsChemins.containsKey(cle_1)) {
-            return cachePlusCourtsChemins.get(cle_1);
-        } else if (cachePlusCourtsChemins.containsKey(cle_2)) {
-            return cachePlusCourtsChemins.get(cle_2);
-        } else {
-            int cout = graphe.plusCourtChemin(s1, s2);
-            cachePlusCourtsChemins.put(cle_1, cout);
-            return cout;
+    private ResultatChemin obtenirResultatChemin(Sommet s1, Sommet s2) {
+        String cle1 = s1.nom + "-" + s2.nom;
+        String cle2 = s2.nom + "-" + s1.nom;
+        if (cachePlusCourtsChemins.containsKey(cle1)) {
+            return cachePlusCourtsChemins.get(cle1);
+        } else if (cachePlusCourtsChemins.containsKey(cle2)) {
+            return cachePlusCourtsChemins.get(cle2);
+        } else { 
+            ResultatChemin resultat = graphe.plusCourtChemin(s1, s2);
+            cachePlusCourtsChemins.put(cle1, resultat);
+            return resultat;
         }
     }
 }

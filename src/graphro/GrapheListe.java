@@ -26,16 +26,24 @@ public class GrapheListe {
         ajouterSommet(source);
         ajouterSommet(destination);
         adjacence.get(source).add(new Arc(destination, cout));
+        adjacence.get(destination).add(new Arc(source, cout));
     }
 
-    // Assurez-vous que cette méthode est déclarée 'public'
     public List<Arc> getAdjacents(Sommet s) {
         return adjacence.getOrDefault(s, new ArrayList<>());
     }
 
-    // Assurez-vous que cette méthode est déclarée 'public'
     public Collection<Sommet> sommets() {
         return adjacence.keySet();
+    }
+
+    public int getCoutArc(Sommet source, Sommet destination) {
+        for (Arc arc : adjacence.getOrDefault(source, new ArrayList<>())) {
+            if (arc.getDestination().equals(destination)) {
+                return arc.getCout();
+            }
+        }
+        return Integer.MAX_VALUE;
     }
 
     public ResultatChemin plusCourtChemin(Sommet source, Sommet destination) {

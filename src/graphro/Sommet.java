@@ -1,58 +1,32 @@
 package graphro;
 
 public class Sommet {
-
     String nom;
-    private int marque;
-    private boolean estIntersection;
+    int id;
+    boolean intersection;
 
-    public Sommet(String nn, int mm, boolean estIntersection) {
-        nom = nn;
-        marque = mm;
-        this.estIntersection = estIntersection;
-    }
-
-    public Sommet(Sommet s, int mm) {
-        nom = s.nom;
-        marque = mm;
-        this.estIntersection = s.estIntersection;
-    }
-
-    public int valeurMarque() {
-        return marque;
-    }
-
-    public void modifierMarque(int m) {
-        marque = m;
+    public Sommet(String nom, int id, boolean intersection) {
+        this.nom = nom;
+        this.id = id;
+        this.intersection = intersection;
     }
 
     public boolean estIntersection() {
-        return estIntersection;
-    }
-
-    public void setEstIntersection(boolean estIntersection) {
-        this.estIntersection = estIntersection;
+        return intersection;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o)
+    public boolean equals(Object obj) {
+        if (this == obj)
             return true;
-        if (o == null || getClass() != o.getClass())
+        if (obj == null || !(obj instanceof Sommet))
             return false;
-
-        Sommet sommet = (Sommet) o;
-
-        return nom.equals(sommet.nom);
+        Sommet other = (Sommet) obj;
+        return nom.equals(other.nom);
     }
 
     @Override
     public int hashCode() {
         return nom.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return nom;
     }
 }
